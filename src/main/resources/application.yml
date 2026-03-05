@@ -12,5 +12,5 @@ spring:
 
 app:
   auth:
-    jwt-secret: qwpWIyUDDe9xAAVPDgCXdzA4neO213WBgV3OjERKsWtp/1g/PYFSdyG8/rvhJ7PnAsCSJE99w3gp7q5vZcwzgg
-    token-validity-days: 7
+    jwt-secret: ${JWT_SECRET:test-only-jwt-secret-change-in-prod-32chars-min}
+    token-validity-minutes: 30
