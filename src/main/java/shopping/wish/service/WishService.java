@@ -1,6 +1,7 @@
 package shopping.wish.service;
 
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,8 @@ public class WishService {
         }
         return wishlistItemRepository.findByWishlist_IdOrderByIdAsc(wishlist.getId())
                 .stream()
-                .map(this::toResponse)
+                .map(this::toResponseOrNull)
+                .filter(Objects::nonNull)
                 .toList();
     }
 
@@ -92,6 +94,17 @@ public class WishService {
     private WishResponse toResponse(WishlistItem item) {
         Product product = productService.findActive(item.getProductId());
         return toResponse(item, product);
+    }
+
+    private WishResponse toResponseOrNull(WishlistItem item) {
+        try {
+            return toResponse(item);
+        } catch (ApiException exception) {
+            if (exception.getErrorCode() == ErrorCode.PRODUCT_NOT_FOUND) {
+                return null;
+            }
+            throw exception;
+        }
     }
 
     private WishResponse toResponse(WishlistItem item, Product product) {
