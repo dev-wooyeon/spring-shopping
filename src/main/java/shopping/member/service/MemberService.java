@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shopping.auth.application.AuthService;
@@ -27,9 +28,7 @@ public class MemberService {
     public TokenResponse register(RegisterRequest request) {
         validateDuplicatedEmail(request.email());
         String encoded = encodePassword(request.password());
-        MemberStatus status = resolveStatus(request.status());
-        MemberRole role = resolveRole(request.role());
-        Member member = memberRepository.save(Member.create(request.email(), encoded, status, role));
+        Member member = saveMember(request.email(), encoded);
         String token = authService.issueToken(member.getId());
         return new TokenResponse(token);
     }
@@ -47,23 +46,17 @@ public class MemberService {
         throw new ApiException(ErrorCode.MEMBER_EMAIL_DUPLICATE);
     }
 
+    private Member saveMember(String email, String encodedPassword) {
+        try {
+            return memberRepository.save(Member.create(email, encodedPassword, MemberStatus.ACTIVE, MemberRole.USER));
+        } catch (DataIntegrityViolationException exception) {
+            throw new ApiException(ErrorCode.MEMBER_EMAIL_DUPLICATE);
+        }
+    }
+
     private Member findById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEMBER_SELLER_REQUIRED));
-    }
-
-    private MemberStatus resolveStatus(MemberStatus status) {
-        if (status != null) {
-            return status;
-        }
-        return MemberStatus.ACTIVE;
-    }
-
-    private MemberRole resolveRole(MemberRole role) {
-        if (role != null) {
-            return role;
-        }
-        return MemberRole.USER;
     }
 
     private void validateActiveSeller(Member member) {

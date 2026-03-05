@@ -16,20 +16,20 @@ import shopping.common.ErrorCode;
 @Component
 public class JwtTokenProvider {
     private final SecretKey signingKey;
-    private final long tokenValidityDays;
+    private final long tokenValidityMinutes;
 
     public JwtTokenProvider(
             @Value("${app.auth.jwt-secret}") String secret,
-            @Value("${app.auth.token-validity-days}") long tokenValidityDays
+            @Value("${app.auth.token-validity-minutes}") long tokenValidityMinutes
     ) {
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        this.tokenValidityDays = tokenValidityDays;
+        this.tokenValidityMinutes = tokenValidityMinutes;
     }
 
     public String create(Long memberId) {
         LocalDateTime now = LocalDateTime.now();
         Date issuedAt = toDate(now);
-        Date expiration = toDate(now.plusDays(tokenValidityDays));
+        Date expiration = toDate(now.plusMinutes(tokenValidityMinutes));
         return Jwts.builder()
                 .subject(String.valueOf(memberId))
                 .issuedAt(issuedAt)
@@ -40,8 +40,12 @@ public class JwtTokenProvider {
 
     public JwtSubject parse(String token) {
         Claims claims = parseClaims(token);
-        Long memberId = Long.parseLong(claims.getSubject());
-        return new JwtSubject(memberId);
+        try {
+            Long memberId = Long.parseLong(claims.getSubject());
+            return new JwtSubject(memberId);
+        } catch (NumberFormatException exception) {
+            throw new ApiException(ErrorCode.AUTHENTICATION_TOKEN_INVALID);
+        }
     }
 
     private Claims parseClaims(String token) {
