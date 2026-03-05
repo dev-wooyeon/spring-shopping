@@ -5,10 +5,10 @@
 
 | ID | Feature | 상태 | 브랜치 | PR | 테스트 | 정반합 노트 |
 | --- | --- | --- | --- | --- | --- | --- |
-| T001 | 회원/인증 코어 | Ready | `codex/t001-auth-core` | Draft | `./gradlew test` | 정: JWT+Interceptor로 단순하게 시작 / 반: 예외 응답 일관성 강화 필요 / 합: 공통 ErrorCode와 Handler로 고정 |
-| T002 | 상품 도메인/API | Todo | `codex/t002-product-core` | - | `./gradlew test` | 정: 상품 CRUD와 검증 먼저 / 반: 비속어 검증 외부 의존성 리스크 / 합: 실패 코드 분리와 타임아웃 고정 |
-| T003 | 위시리스트 도메인/API | Todo | `codex/t003-wish-core` | - | `./gradlew test` | 정: 사용자 중심 조회 우선 / 반: 중복 저장과 수량 예외 누락 가능 / 합: 중복 체크와 수량 검증을 서비스에 고정 |
-| T004 | 문서 정리 | Todo | `codex/t004-docs-update` | - | 시나리오 수동 검증 | 정: 시나리오 재현 가능한 문서 / 반: 구현과 문서 불일치 가능 / 합: PR마다 문서 동기화 체크 |
+| T001 | 회원/인증 코어 | Draft PR | `codex/t001-auth-core` | [#1](https://github.com/dev-wooyeon/spring-shopping/pull/1) | `./gradlew test` | 정: JWT+Interceptor로 단순하게 시작 / 반: 예외 응답 일관성 강화 필요 / 합: 공통 ErrorCode와 Handler로 고정 |
+| T002 | 상품 도메인/API | Draft PR | `codex/t002-product-core` | [#2](https://github.com/dev-wooyeon/spring-shopping/pull/2) | `./gradlew test` | 정: 상품 CRUD와 검증 먼저 / 반: 비속어 검증 외부 의존성 리스크 / 합: 실패 코드 분리와 타임아웃 고정 |
+| T003 | 위시리스트 도메인/API | Draft PR | `codex/t003-wish-core` | [#3](https://github.com/dev-wooyeon/spring-shopping/pull/3) | `./gradlew test` | 정: 사용자 중심 조회 우선 / 반: 중복 저장과 수량 예외 누락 가능 / 합: 중복 체크와 수량 검증을 서비스에 고정 |
+| T004 | 문서 정리 | Draft PR | `codex/t004-docs-update` | [#4](https://github.com/dev-wooyeon/spring-shopping/pull/4) | 시나리오 수동 검증 | 정: 시나리오 재현 가능한 문서 / 반: 구현과 문서 불일치 가능 / 합: PR마다 문서 동기화 체크 |
 
 ## 운영 규칙
 1. 작업 단위는 기능 단위로 고정한다.
