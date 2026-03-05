@@ -21,10 +21,4 @@ public class MemberController {
         TokenResponse response = memberService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
-        TokenResponse response = memberService.login(request);
-        return ResponseEntity.ok(response);
-    }
 }
